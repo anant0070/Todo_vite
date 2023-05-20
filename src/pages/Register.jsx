@@ -13,17 +13,23 @@ const Register = () => {
 
 
   const submitHandler = async(e) => {
-    e.preventDefault();
     setLoading(true);
+    e.preventDefault();
     try {
-      const {data}=await axios.post(`${server}/users/new`,{
-        name,email,password
-      },{
-        headers:{
-          "Content-Type":"application/json"
+      const { data } = await axios.post(
+        `${server}/users/new`,
+        {
+          name,
+          email,
+          password,
         },
-        withCredentials:true
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       toast.success(data.message);
       setIsAuthenticated(true);
       setLoading(false);

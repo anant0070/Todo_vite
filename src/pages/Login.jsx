@@ -12,14 +12,19 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);  
     try {
-      const {data}=await axios.post(`${server}/users/login`,{
-        email,password
-      },{
-        headers:{
-          "Content-Type":"application/json"
+      const { data } = await axios.post(
+        `${server}/users/login`,
+        {
+          email,
+          password,
         },
-        withCredentials:true
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       toast.success(data.message);
       setIsAuthenticated(true);
       setLoading(false);
@@ -35,18 +40,18 @@ const Login = () => {
         <section>
             <form onSubmit={submitHandler} >
             <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="Email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
                 <button disabled={loading} type='submit'>Login</button>
                 <h4>Or</h4>

@@ -6,22 +6,19 @@ import { toast } from 'react-hot-toast';
 
 const Header = () => {
   const{isAuthenticated,setIsAuthenticated,loading,setLoading}=useContext(Context); 
-  const logoutHandler = async(e) => {
+  const logoutHandler = async() => {
     setLoading(true);
-    e.preventDefault();
     try {
-      await axios.get(`${server}/users/logout`,{
-       
-      },{
-        
-        withCredentials:true
-      })
+      await axios.get(`${server}/users/logout`, {
+        withCredentials: true,
+      });
       toast.success("Logged out successfuly");
       setIsAuthenticated(false);
       setLoading(false);
     } catch (error) {
       toast.error(error.response.data.message);
       setIsAuthenticated(true);
+      setLoading(false);
     }
   };
   // console.log(isAuthenticated);

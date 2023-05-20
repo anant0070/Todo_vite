@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState,useEffect,useContext } from 'react'
 import { server,Context } from '../main';
 import { toast } from 'react-hot-toast';
-import TodoItem from './TodoItem';
+import TodoItem from '../components/TodoItem';
 import { Navigate } from 'react-router-dom';
 
 const Home = () => {
@@ -14,24 +14,27 @@ const Home = () => {
   const{isAuthenticated}=useContext(Context); 
   const updateHandler=async(id)=>{
     try {
-      const {data}=await axios.put(`${server}/task/${id}`,{},{
-        withCredentials:true
-      }
-      )
+      const { data } = await axios.put(
+        `${server}/task/${id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(data.message);
-      setRefresh(prev=>!prev)
+      setRefresh((prev)=>!prev)
     } catch (error) {
       toast.error(error.response.data.message)
     }
-  }
+  };
   const deleteHandler=async(id)=>{
     try {
-      const {data}=await axios.delete(`${server}/task/${id}`,{
-        withCredentials:true
-      }
-      )
+      const { data } = await axios.delete(`${server}/task/${id}`, {
+        withCredentials: true,
+      });
+
       toast.success(data.message);
-      setRefresh(prev=>!prev)
+      setRefresh((prev)=>!prev)
     } catch (error) {
       toast.error(error.response.data.message)
     }
@@ -39,34 +42,42 @@ const Home = () => {
   const submitHandler=async(e)=>{
     e.preventDefault();
     try {
-      setLoading(true)
-      const {data}=await axios.post(`${server}/task/new`,{
-        title,description},{
-          withCredentials:true,
-          headers:{
-            "Content-Type":"application/json"
-          }
-      })
+      setLoading(true);
+      const { data } = await axios.post(
+        `${server}/task/new`,
+        {
+          title,
+          description,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setTitle("")
       setDescription("")
       toast.success(data.message)
       setLoading(false)
-      setRefresh(prev=>!prev)
+      setRefresh((prev)=>!prev)
     } catch (error) {
       toast.error(error.response.data.message)
       setLoading(false)
     }
   }
   useEffect(() => {
-    axios.get(`${server}/task/my`,{
-      withCredentials:true,
-    }).then(res=>{
-      setTasks(res.data.tasks)
+    axios
+    .get(`${server}/task/my`, {
+      withCredentials: true,
     })
-    .catch((e)=>{
-      toast.error(e.response.data.message)
+    .then((res) => {
+      setTasks(res.data.tasks);
     })
-  }, [refresh])
+    .catch((e) => {
+      toast.error(e.response.data.message);
+    });
+}, [refresh]);
   if(!isAuthenticated)return <Navigate to={"/login"}/>
   return (
     <div className='container'>
@@ -74,18 +85,18 @@ const Home = () => {
         <section>
             <form onSubmit={submitHandler} >
             <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
             type="text"
             placeholder="Title"
             required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
            <input
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
             type="text"
             placeholder="Description"
             required
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
                 <button disabled={loading} type='submit'>Add task</button>
             </form>
